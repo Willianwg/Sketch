@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react"; 
 import { View, AsyncStorage, ScrollView, Text, Image, StyleSheet, Button, TouchableOpacity, FlatList } from "react-native"; 
-import avatar from "../assets/wallpaper.png";
 import api from "../services/api";
 import { AntDesign } from "@expo/vector-icons";
 

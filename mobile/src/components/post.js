@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { View, Text, FlatList, StyleSheet, Image, TouchableOpacity, TextInput } from "react-native"; 
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
-export default function Post({ item, user_id, postComment}){ 
+export default function Post({ item, user_id, postComment, deletePost }){ 
 	const [ comment, setComment ] = useState("");
 	
 	return(

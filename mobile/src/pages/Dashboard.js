@@ -3,7 +3,6 @@ import { KeyboardAvoidingView, View, AsyncStorage, FlatList, Image, Text, Toucha
 import Post from "../components/post";
 import Comment from "../components/comment";
 
-import image from "../assets/wallpaper.png";
 import api from "../services/api";
 import logo from "../assets/smallSketch.png";
 import { SimpleLineIcons, Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
@@ -65,6 +64,16 @@ export default function Dashboard({ navigation }){
 		//updatePost(post_id, user_id, comment);
 	};
 	
+	async function deletePost(post_id){
+		await api.delete(`/posts/${ post_id }/delete`);
+		
+		const filteredFeed = feed.filter(post=>{
+			if(post._id !== post_id)
+				return post;
+		});
+		
+		setFeed(filteredFeed);
+	};
 	
 	return(
 		<KeyboardAvoidingView style={ styles.container } behavior="padding" >
@@ -86,7 +95,7 @@ export default function Dashboard({ navigation }){
 				style={{ width:"100%", marginTop:1, backgroundColor:"#1B1B1B", borderRadius:8}}
 				data={ feed }
 				keyExtractor={(item, index)=>index.toString()}
-				renderItem={ ({ item })=><Post item={ item } user_id={ user_id } postComment={ postComment }/>}
+				renderItem={ ({ item })=><Post item={ item } user_id={ user_id } postComment={ postComment } deletePost={ deletePost }/>}
 				onRefresh={ refresh }
 				refreshing={ refreshing }
 				onEndReached={ ()=> loadFeed(page,true) }
