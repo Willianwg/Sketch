@@ -13,7 +13,7 @@ export default function Post({ item, user_id, postComment, deletePost }){
 						{ item.author.username }
 					</Text>
 					<TouchableOpacity onLongPress={ user_id===item.author._id?()=>deletePost(item._id):()=>{ alert(`${ user_id } --- ${ item.author._id }`) }} >
-						<Text style={{ color:"grey", fontSize:17, marginRight:15}}>â€¢â€¢â€¢</Text> 
+						<Text style={{ color:"grey", fontSize:17, marginRight:15}}>•••</Text> 
 					</TouchableOpacity>
 				</View>
 				<Image source={{ uri:item.image_url }} style={styles.image} />
