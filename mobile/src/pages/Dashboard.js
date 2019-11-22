@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { KeyboardAvoidingView, View, AsyncStorage, FlatList, Image, Text, TouchableOpacity , StyleSheet, ActivityIndicator, TextInput } from "react-native"; 
 import Post from "../components/post";
 import Comment from "../components/comment";
+import socketio from "socket.io-client";
 
 import api from "../services/api";
 import logo from "../assets/smallSketch.png";
@@ -19,6 +20,8 @@ export default function Dashboard({ navigation }){
 		async function getUserId(){
 			const user = await AsyncStorage.getItem("user");
 			setId(user);
+			// const socket = socketio("http://localhost:3001");
+			// socket.emit("myName", "Willian");
 		};
 		getUserId();
 		loadFeed(1);
@@ -95,7 +98,7 @@ export default function Dashboard({ navigation }){
 				style={{ width:"100%", marginTop:1, backgroundColor:"#1B1B1B", borderRadius:8}}
 				data={ feed }
 				keyExtractor={(item, index)=>index.toString()}
-				renderItem={ ({ item })=><Post item={ item } user_id={ user_id } postComment={ postComment } deletePost={ deletePost }/>}
+				renderItem={ ({ item })=><Post item={ item } user_id={ user_id } postComment={ postComment } deletePost={ deletePost } navigation={ navigation }/>}
 				onRefresh={ refresh }
 				refreshing={ refreshing }
 				onEndReached={ ()=> loadFeed(page,true) }

@@ -9,6 +9,7 @@ import Dashboard from "./pages/Dashboard";
 import Profile from "./pages/Profile";
 import NewPost from "./pages/NewPost";
 import ChatList from "./pages/ChatList";
+import Inbox from "./pages/Inbox";
 
 const TabNavigator = createBottomTabNavigator({
 		Dashboard,
@@ -54,7 +55,8 @@ const SwitchNavigator = createSwitchNavigator({
 
 const StackNavigator = createStackNavigator({
 	SwitchNavigator,
-	ChatList
+	ChatList,
+	Inbox,
 },{
 	headerMode:"none"
 })

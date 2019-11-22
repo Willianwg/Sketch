@@ -1,17 +1,24 @@
 import React, { useState } from "react"; 
-import { View, Text, FlatList, StyleSheet, Image, TouchableOpacity, TextInput } from "react-native"; 
+import { AsyncStorage, View, Text, FlatList, StyleSheet, Image, TouchableOpacity, TextInput } from "react-native"; 
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
-export default function Post({ item, user_id, postComment, deletePost }){ 
+export default function Post({ item, user_id, postComment, deletePost, navigation }){ 
 	const [ comment, setComment ] = useState("");
+	
+	async function navigate(){
+		await AsyncStorage.setItem("chat", JSON.stringify({ ...item.author }) );
+		navigation.navigate("Inbox");
+	};
 	
 	return(
 			<View style={styles.container} >
 				<View style={{ flex:1,flexDirection:"row", alignItems:"center", borderBottomWidth:1, borderBottomColor:"#C6C6C6", paddingBottom:8}}>
 					<Image source={{ uri:item.author.avatar_url }} style={ styles.avatar } />
+					<TouchableOpacity onPress={ navigate } style={{ flex:1 }} >
 					<Text style={{ flex:1,marginLeft:8, fontSize:14, lineHeight:30 }}>
 						{ item.author.username }
 					</Text>
+					</TouchableOpacity >
 					<TouchableOpacity onLongPress={ user_id===item.author._id?()=>deletePost(item._id):()=>{ alert(`${ user_id } --- ${ item.author._id }`) }} >
 						<Text style={{ color:"grey", fontSize:17, marginRight:15}}>•••</Text> 
 					</TouchableOpacity>
