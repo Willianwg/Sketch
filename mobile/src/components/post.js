@@ -7,7 +7,7 @@ export default function Post({ item, user_id, postComment, deletePost, navigatio
 	
 	async function navigate(){
 		await AsyncStorage.setItem("chat", JSON.stringify({ ...item.author }) );
-		navigation.navigate("Inbox");
+		navigation.navigate("Inbox", { talkingTo:item.author, previousMessages:"" });
 	};
 	
 	return(

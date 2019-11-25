@@ -3,21 +3,25 @@ import { AsyncStorage, KeyboardAvoidingView, View, StyleSheet, Text, FlatList, T
 import socketio from "socket.io-client";
 
 export default function Inbox({ navigation }){
-	const [ messages, setMessages ] = useState([]);
+	const prev = navigation.getParam("previousMessages");
+	const [ messages, setMessages ] = useState([...prev]);
 	const [ newMessage, setNewMessage ] = useState("");
 	const [ user_id, setUserId ] = useState("");
 	const [ list , setList ] = useState("");
+	const talkingTo = navigation.getParam("talkingTo");
 	
 	const socket = useMemo(()=>socketio("http://localhost:3001", { query:{ user_id } }), [ user_id ]);
 	
 	useEffect( () =>{
 		AsyncStorage.getItem("user").then(user=>setUserId(user));
+	
+		socket.on("Message", data=>alert(JSON.stringify(data)) );
 		
-		socket.on("previousMessages", data=>setMessages(data));
+		return ()=>socket.disconnect();
 	}, [ ] ); 
 	
 	function sendMessage(){
-		const message ={ to:navigation.getParam("talkingTo")._id, message:newMessage };
+		const message ={ to:talkingTo._id, message:newMessage, from:user_id };
 		
 		setMessages([...messages, message]);
 		
@@ -41,9 +45,10 @@ export default function Inbox({ navigation }){
 				keyExtractor={ (item, index)=>String(index) }
 				renderItem={({ item, index })=>(
 				<View style={{ flex:1 }} >
-				{ item.to === user_id && <View style={[styles.messageContainer,{ backgroundColor:"#929292", alignSelf:"flex-start" }]}> <Text style={ styles.receivedMessage } >{ item.message }</Text></View>	}
+				{ item.from !== user_id && <View style={[styles.messageContainer,{ backgroundColor:"#929292", alignSelf:"flex-start" }]}><Text style={ styles.receivedMessage }>{ item.message }</Text></View>}
 				
-				{ item.to !== user_id && <View style={[styles.messageContainer,{ backgroundColor:"black", alignSelf:"flex-end" }]}><Text style={ styles.myMessage } >{ item.message }</Text></View>	}
+				{ item.from === user_id && <View style={[styles.messageContainer,{ backgroundColor:"black", alignSelf:"flex-end" }]}><Text style={ styles.myMessage } >{ item.message }</Text></View>	}
+				
 				</View>
 				)}
 			/>

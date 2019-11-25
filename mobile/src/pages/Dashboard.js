@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { KeyboardAvoidingView, View, AsyncStorage, FlatList, Image, Text, TouchableOpacity , StyleSheet, ActivityIndicator, TextInput } from "react-native"; 
 import Post from "../components/post";
 import Comment from "../components/comment";
-import socketio from "socket.io-client";
+// import socketio from "socket.io-client";
 
 import api from "../services/api";
 import logo from "../assets/smallSketch.png";

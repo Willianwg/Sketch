@@ -5,6 +5,9 @@ const cors = require("cors");
 const path = require("path");
 const http = require("http");
 
+const sendMessage = require("./sendMessage");
+const Chat = require("./models/Chat");
+
 const routes = require("./routes");
 
 const app = express();
@@ -13,24 +16,26 @@ const io = socketio(server);
 
 mongoose.connect("mongodb+srv://user:qwer1245@cluster0-x73mg.mongodb.net/sketch?retryWrites=true&w=majority",{ useNewUrlParser:true, useUnifiedTopology:true });
 
-const users={};
+let users= { };
 const messages = [ ];
 
 io.on("connection", socket=>{
 	const { user_id } = socket.handshake.query;
 	users[user_id] = socket.id;
+	console.log(socket.id,": conectado");
 	
-	const previousMessages = messages.filter(item=>{
-		if(item.to[user_id])
-			return item;
-	});
-	if(previousMessages){
-		io.to(users[user_id]).emit("previousMessages", previousMessages);
-	};
+	socket.emit("previousMessages", messages);
 	
 	socket.on("newMessage", data=>{
-		console.log(data);
 		messages.push(data);
+		sendMessage(users[data.to], data, io);
+		
+	});
+	
+	socket.on("disconnect", data=>{
+		console.log(socket.id,": desconectado");
+		users[user_id] = undefined;
+		console.log(users[user_id] );
 	});
 	
 });
