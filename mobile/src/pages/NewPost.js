@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { withNavigationFocus } from "react-navigation";
-import { ImageBackground, AsyncStorage, ScrollView, KeyboardAvoidingView, View, Text, TextInput, StyleSheet, Image, TouchableOpacity, FlatList  } from "react-native"; 
-import camera from "../assets/camera.svg";
+import SelectedImageModal from "../components/modal";
 
-import api from "../services/api";
+import { withNavigationFocus } from "react-navigation";
+import { ScrollView, KeyboardAvoidingView, View, Text, StyleSheet, Image, TouchableOpacity, FlatList, Modal } from "react-native"; 
+import camera from "../assets/camera.svg";
 
 import * as DocumentPicker from 'expo-document-picker';
 import * as ImagePicker from 'expo-image-picker';
@@ -19,6 +19,7 @@ function NewPost({ navigation }){
 	const [ description, setDescription ] = useState("");
 	const [ gallery, setGallery ] = useState([]);
 	const [ lastImage, setLastImage ] = useState(0);
+	const [ visibility, setVisibility ] = useState(false);
 	
 	 const [ cameraPermission, setPermission ] = useState(false);
 	const [ camera, setCamera ] = useState("");
@@ -40,7 +41,7 @@ function NewPost({ navigation }){
 			setPermission(status === "granted"); 
 			
 			const { assets } = await MediaLibrary.getAssetsAsync({ first:10 , after:String(afterNumber) });
-			//alert(JSON.stringify(photos));
+			//alert(JSON.stringify(assets));
 			lastImage?setGallery([...gallery, ...assets]):setGallery(assets);
 			setLastImage(lastImage+10);
 			
@@ -62,28 +63,6 @@ function NewPost({ navigation }){
 			};
 		};
 	
-	async function upload(){
-		if(!image.name) return;
-		try {
-		const user_id = await AsyncStorage.getItem("user");
-		const data = new FormData();
-		const newImage ={ ...image, type:"image/jpeg" };
-		
-		data.append("description", description );
-		data.append("image",newImage);
-		
-		const response = await api.post("/posts", data,{
-			headers:{
-				user_id,
-			},
-		});
-		//alert(JSON.stringify(response.data)); 
-		navigation.navigate("Dashboard");
-		}catch(err){
-			alert(err);
-		};
-	};
-	
 	function changeCamera(){
 		if( type === front ){
 			setType(back);
@@ -93,6 +72,16 @@ function NewPost({ navigation }){
 			setRatio("16:9");
 		};
 	};
+	
+	async function takePicture(){ 
+		await camera.takePictureAsync({ quality:0.1, skipProcessing:true, onPictureSaved:data=>imageee(data) });
+		
+		async function imageee(foto){
+			setImage(foto);
+			setVisibility(true);
+			//alert(JSON.stringify(foto));  
+		}
+	}
 	
 	return(
 	
@@ -113,17 +102,26 @@ function NewPost({ navigation }){
 				keyExtractor={ (item, index)=>String(index) }
 				horizontal
 				renderItem={({ item })=>(
-					<Image source={{ uri:item.uri }} style={{ height:60, width:60, margin:3, resizeMode:"cover", borderWidth:1, borderColor:"grey"}} /> 
+					<TouchableOpacity onPress={ ()=>{ setImage(item); setVisibility(true) } }>
+						<Image source={{ uri:item.uri }} style={{ height:60, width:60, margin:3, resizeMode:"cover", borderWidth:1, borderColor:"grey"}} /> 
+					</TouchableOpacity>
 				)}
 				onEndReached={ ()=>getLibrary(lastImage) }
 				onEndReachedThreshold={ 0.2 }
 			/>
+			<Modal 
+				onRequestClose={ ()=>setVisibility(false) } 
+				visible={ visibility }
+				animationType="fade"
+			>
+				<SelectedImageModal image={ image } navigation={ navigation } setVisibility={ setVisibility }/>
+			</Modal>
 				
            <View style={ styles.optionsContainer } >
            
            <Text style={{ fontSize:60, color:"white", flex:1 }}>☆</Text> 
            
-       	    <TouchableOpacity style={{ flex:1  }}  onPress={ async ()=>{ const foto = await camera.takePictureAsync({ quality:1 }); alert(JSON.stringify(foto));  }} >
+       	    <TouchableOpacity style={{ flex:1  }}  onPress={ takePicture } >
 					<FontAwesome name="circle" size={ 60 } color="white" /> 
 				</TouchableOpacity >
 				
@@ -144,12 +142,12 @@ function NewPost({ navigation }){
 		flex:1,
 		alignItems:"center",
 		justifyContent:"flex-end",
-		backgroundColor:"white",
+		backgroundColor:"black",
 	},
 	camera:{
-		flex: 1,
+		flex:1,
 		height:"100%",
-		width:"100%" ,
+		width:"100%",
 		position:"absolute",
 	},
 	list:{
