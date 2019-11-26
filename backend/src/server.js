@@ -1,4 +1,6 @@
 const express = require("express");
+const dotenv = require("dotenv");
+dotenv.config();
 const socketio = require("socket.io");
 const mongoose = require("mongoose");
 const cors = require("cors");
@@ -22,7 +24,6 @@ const messages = [ ];
 io.on("connection", socket=>{
 	const { user_id } = socket.handshake.query;
 	users[user_id] = socket.id;
-	console.log(socket.id,": conectado");
 	
 	socket.emit("previousMessages", messages);
 	
@@ -30,12 +31,6 @@ io.on("connection", socket=>{
 		messages.push(data);
 		sendMessage(users[data.to], data, io);
 		
-	});
-	
-	socket.on("disconnect", data=>{
-		console.log(socket.id,": desconectado");
-		users[user_id] = undefined;
-		console.log(users[user_id] );
 	});
 	
 });

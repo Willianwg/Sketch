@@ -6,7 +6,6 @@ export default function Post({ item, user_id, postComment, deletePost, navigatio
 	const [ comment, setComment ] = useState("");
 	
 	async function navigate(){
-		await AsyncStorage.setItem("chat", JSON.stringify({ ...item.author }) );
 		navigation.navigate("Inbox", { talkingTo:item.author, previousMessages:"" });
 	};
 	

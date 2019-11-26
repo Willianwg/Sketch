@@ -44,7 +44,7 @@ export default function Dashboard({ navigation }){
 	};
 	
 	async function logout(){
-		await AsyncStorage.removeItem("user");
+		await AsyncStorage.clear();
 		navigation.navigate("Login");
 	};
 	

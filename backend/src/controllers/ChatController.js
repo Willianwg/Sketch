@@ -1,39 +1,31 @@
 const User = require("../models/User");
 const Chat = require("../models/Chat");
+const Cryptr = require("cryptr");
+const cryptr = new Cryptr(process.env.SECRET);
 
 module.exports={
 	
 	async index(req, res){
-		const { _id } = req.headers;
-		//const user = await User.find({ _id });
-		const chat = await Chat.find({ users:_id }); 
-		if(!chat){
-			// await Chat.create({ user:[_id], messages:[] });
-			return res.json({ error:"Not chat found", id:`${_id}` });
-		};
-		
-		return res.json(chat);
-	},
-	async store(req,res){
-		const { _id } = req.headers;
-		let chat = await Chat.find({ users:_id });
-		if(!chat){
-			chat = await Chat.create({ users:[_id] });
-			
-			return res.json(chat);
-		}
-		
-			return res.json(chat);
-	},
-	
-	async test(req, res){
 		const { _id } = req.headers;
 		const chat = await Chat.find({ users:_id }).populate("users").exec();
 		
 		if(!chat)
 			return res.json({ error:"Not chat found", id:`${_id}` });
 		
-		return res.json(chat);
+		const decrypted = chat.map(item=>{
+			const messages = item.messages.map(object=>{
+				const message = cryptr.decrypt(object.message);
+				const formated = { ...object, message };
+				
+				return formated;
+			});
+			const { users } = item;
+			const finalResult = { users, messages };
+			
+			return finalResult;
+		});
+		
+		return res.json(decrypted);
 	},
 	
 };

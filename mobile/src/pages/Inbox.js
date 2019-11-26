@@ -3,8 +3,7 @@ import { AsyncStorage, KeyboardAvoidingView, View, StyleSheet, Text, FlatList, T
 import socketio from "socket.io-client";
 
 export default function Inbox({ navigation }){
-	const prev = navigation.getParam("previousMessages");
-	const [ messages, setMessages ] = useState([...prev]);
+	const [ messages, setMessages ] = useState();
 	const [ newMessage, setNewMessage ] = useState("");
 	const [ user_id, setUserId ] = useState("");
 	const [ list , setList ] = useState("");
@@ -14,10 +13,13 @@ export default function Inbox({ navigation }){
 	
 	useEffect( () =>{
 		AsyncStorage.getItem("user").then(user=>setUserId(user));
-	
+		AsyncStorage.getItem("chat").then(chat =>{
+			const parsed = JSON.parse(chat);
+			const inbox = parsed.find(item =>item.user._id === talkingTo._id);
+			setMessages(inbox.messages);
+		});
 		socket.on("Message", data=>alert(JSON.stringify(data)) );
 		
-		return ()=>socket.disconnect();
 	}, [ ] ); 
 	
 	function sendMessage(){
@@ -28,6 +30,22 @@ export default function Inbox({ navigation }){
 		socket.emit("newMessage", message);
 		
 		setNewMessage(" ");
+		storeMessage(message);
+	};
+	
+	async function storeMessage(message){
+		const storage = await AsyncStorage.getItem("chat");
+		const chat = JSON.parse(storage);
+		// console.log(chat);
+		const newChat = chat.map(item=>{
+			if( item.user._id === talkingTo._id ){
+				item.messages.push(message);
+				return item;
+			};
+			return item;
+		});
+		
+		await AsyncStorage.setItem("chat", JSON.stringify(newChat));
 	};
 	
 	function end(){

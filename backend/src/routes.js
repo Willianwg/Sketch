@@ -22,6 +22,6 @@ routes.post("/posts", upload.single("image"), PostController.store);
 routes.delete("/posts/:post_id/delete", PostController.destroy);
 routes.post("/posts/:post_id/new_comment", CommentController.store);
 
-routes.get("/chat", ChatController.test);
+routes.get("/chat", ChatController.index);
 
 module.exports = routes;

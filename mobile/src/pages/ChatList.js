@@ -1,22 +1,23 @@
 import React, { useState, useEffect } from "react"; 
-import { AsyncStorage, KeyboardAvoidingView, View, Image, StyleSheet, Text, FlatList, TextInput, TouchableOpacity } from "react-native"; 
+import { AsyncStorage, KeyboardAvoidingView, View, Image, StyleSheet, Text, FlatList, TextInput, TouchableOpacity, ActivityIndicator } from "react-native"; 
 // import socketio from "socket.io-client";
 import api from "../services/api";
 
 export default function ChatList({ navigation }){
 	const [ user_id, setUserId ] = useState("");
 	const [ chat, setChat ] = useState([]);
-	const [ inboxes, setInbox ] = useState([]);
+	const [ loading, setLoading ] = useState(true);
 	
 	async function navigate(talkingTo){
-		// await AsyncStorage.setItem("chat", JSON.stringify({ ...item.author }) );
-		navigation.navigate("Inbox",{ talkingTo:talkingTo.user, previousMessages:talkingTo.messages });
+		navigation.navigate("Inbox",{ talkingTo:talkingTo.user });
 	};
 	useEffect( () =>{
 		async function getChatt(){
 			const chatData= await AsyncStorage.getItem("chat");
-			const parsed = JSON.parse(chatData);
-			setChat([parsed]);
+			if(chatData){
+				const parsed = JSON.parse(chatData);
+				setChat(parsed);
+			};
 		
 			const _id = await AsyncStorage.getItem("user");
 			setUserId(_id);
@@ -30,8 +31,9 @@ export default function ChatList({ navigation }){
 				const object = { messages, user };
 				return object
 			});
-			
-			setInbox(filtered);
+			await AsyncStorage.setItem("chat", JSON.stringify(filtered));
+			setLoading(false);
+			setChat(filtered);
 		};
 		
 		getChatt();
@@ -39,26 +41,12 @@ export default function ChatList({ navigation }){
 	}, [ ] ); 
 	
 	function Item({ item }){
-
-		return (
-			<View style={ styles.itemContainer } >
-				<Image source={{ uri:item.avatar_url }} style={ styles.avatar }  />
-				<TouchableOpacity onPress={()=>navigate(item)} style={{ flex:1, alignSelf:"center" }} >
-					<Text style={{ marginLeft:8, fontSize:18, lineHeight:30, fontWeight:"bold"}}>
-						{ item.username }
-					</Text>
-				</TouchableOpacity >
-			</View>
-		);
-	};
-	
-	function Inbox({ item }){
 		
 		return (
 			<View style={ styles.itemContainer } >
 				<Image source={{ uri:item.user.avatar_url }} style={ styles.avatar }  />
 				<TouchableOpacity onPress={()=>navigate(item)} style={{ flex:1, alignSelf:"center" }} >
-					<Text style={{ marginLeft:8, fontSize:18, lineHeight:30, fontWeight:"bold"}}>
+					<Text style={{ marginLeft:8, fontSize:24, lineHeight:30, fontWeight:"bold"}}>
 						{ item.user.username }
 					</Text>
 				</TouchableOpacity >
@@ -71,12 +59,10 @@ export default function ChatList({ navigation }){
 			<FlatList
 				data={ chat }
 				keyExtractor={(item, index) =>String(index)}
-				renderItem={({ item }) => <Item item={item} />}
-			/>
-			<FlatList
-				data={ inboxes }
-				keyExtractor={(item, index) =>String(index)}
-				renderItem={({ item }) => <Inbox item={item} />}
+				renderItem={ Item }
+				ListFooterComponent={ loading && <ActivityIndicator size="small" color="grey"  style={{ marginVertical:30 }}/> }
+				initialNumToRender={ 5 }
+				maxToRenderPerBatch={ 5 }
 			/>
 		</View>
 	); 
@@ -90,9 +76,9 @@ const styles = StyleSheet.create({
 	avatar:{
 		
 		marginLeft:10,
-		height:40,
-		width:40,
-		borderRadius:20,
+		height:50,
+		width:50,
+		borderRadius:25,
 		
 	},
 	itemContainer:{
