@@ -11,6 +11,10 @@ const UserSchema = new mongoose.Schema({
 		type:String,
 		default:"default-avatar.png",
 	},
+	friends:[{
+		type:mongoose.Schema.Types.ObjectId,
+		ref:"User",
+	}],
 },{
 	toJSON:{
 		virtuals:true
