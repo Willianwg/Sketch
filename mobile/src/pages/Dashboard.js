@@ -16,6 +16,7 @@ export default function Dashboard({ navigation }){
 	const [ page, setPage ] = useState(1);
 	const [ user_id, setId ] = useState("");
 	
+	
 	useEffect( () =>{
 		async function getUserId(){
 			const user = await AsyncStorage.getItem("user");
@@ -25,6 +26,7 @@ export default function Dashboard({ navigation }){
 		};
 		getUserId();
 		loadFeed(1);
+		
 	}, [ ] ); 
 	
 	async function loadFeed(pageNumber=page, shouldRefresh=false){
@@ -106,8 +108,7 @@ export default function Dashboard({ navigation }){
 				ListFooterComponent={ loading && <ActivityIndicator size="small" color="white"  style={{ marginVertical:30 }}/> }
 				initialNumToRender={ 3 }
 			/>
-			
-			
+
 		</KeyboardAvoidingView> 
 	); 
 };

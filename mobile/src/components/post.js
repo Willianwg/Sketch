@@ -1,6 +1,7 @@
 import React, { useState } from "react"; 
-import { AsyncStorage, View, Text, FlatList, StyleSheet, Image, TouchableOpacity, TextInput } from "react-native"; 
+import { AsyncStorage, View, Text, FlatList, StyleSheet, Image, TouchableOpacity, TextInput, Alert } from "react-native"; 
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import api from "../services/api";
 
 export default function Post({ item, user_id, postComment, deletePost, navigation }){ 
 	const [ comment, setComment ] = useState("");
@@ -9,12 +10,28 @@ export default function Post({ item, user_id, postComment, deletePost, navigatio
 		navigation.navigate("Inbox", { talkingTo:item.author, previousMessages:"" });
 	};
 	
+	function options(){
+		Alert.alert(
+ 		 `------${ item.author.username }------`,"",
+		  [
+		    {text: 'Message', onPress: navigate },
+  		  {text: 'Add Friend', onPress: addFriend },
+		  ],
+		  {cancelable: true},
+		);
+	};
+	
+	async function addFriend(){
+		await api.post(`/users/${ item.author._id }/friendRequests`, {}, { headers:{ user_id } });
+		
+	};
+	
 	return(
 			<View style={styles.container} >
 				<View style={{ flex:1,flexDirection:"row", alignItems:"center", borderBottomWidth:1, borderBottomColor:"#C6C6C6", paddingBottom:8}}>
 					<Image source={{ uri:item.author.avatar_url }} style={ styles.avatar } />
-					<TouchableOpacity onPress={ navigate } style={{ flex:1 }} >
-					<Text style={{ flex:1,marginLeft:8, fontSize:14, lineHeight:30 }}>
+					<TouchableOpacity onPress={()={} } onLongPress={ options } style={{flex:1, justifyContent:"center", alignSelf:"center" }} >
+					<Text style={{ marginLeft:8, fontSize:14, lineHeight:30 }}>
 						{ item.author.username }
 					</Text>
 					</TouchableOpacity >

@@ -29,7 +29,7 @@ routes.post("/posts/:post_id/new_comment", CommentController.store);
 routes.get("/chat", ChatController.index);
 
 routes.post("/users/:target_id/friendRequests", FriendRequest.store);
-routes.post("/friendRequests/:request_id/approvals", Approval.store);
-routes.post("/friendRequests/:request_id/rejections", Rejection.store);
+routes.post("/friendRequests/:request_id/approvals", ApprovalController.store);
+routes.post("/friendRequests/:request_id/rejections", RejectionController.store);
 
 module.exports = routes;
