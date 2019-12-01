@@ -14,16 +14,17 @@ import Inbox from "./pages/Inbox";
 const TabNavigator = createBottomTabNavigator({
 		Dashboard,
 		NewPost,
-		Profile
+		Profile,
+		ChatList,
 	},{
 		defaultNavigationOptions:({ navigation })=>({
 			tabBarIcon:({ focused, horizontal, tintColor })=>{
 				const { routeName } = navigation.state;
-				let IconComponent = MaterialCommunityIcons;
+				let IconComponent = Ionicons;
 				let iconName;
 				if( routeName === "Dashboard"){
 					iconName = `home-outline`;
-      
+      			IconComponent = MaterialCommunityIcons
 				}  else if(routeName === "Profile") {
        		 		iconName = `user`;
        				
@@ -31,7 +32,9 @@ const TabNavigator = createBottomTabNavigator({
     			}  else if( routeName === "NewPost"){
     					iconName = "ios-add-circle"
     
-    					IconComponent = Ionicons;
+    			}  else if( routeName === "ChatList" ){
+ 						iconName = "ios-chatboxes"
+ 								
     			}
      
      			return <IconComponent name={iconName} size={25} color={ tintColor } />;
@@ -55,7 +58,6 @@ const SwitchNavigator = createSwitchNavigator({
 
 const StackNavigator = createStackNavigator({
 	SwitchNavigator,
-	ChatList,
 	Inbox,
 },{
 	headerMode:"none"
