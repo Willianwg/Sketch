@@ -90,8 +90,8 @@ export default function Dashboard({ navigation }){
 				</TouchableOpacity>
 				<Image source={ logo } style={{ resizeMode:"contain", width:85, height:54, alignSelf:"center" }}/> 
 				<View style={{ width:"20%", alignItems:"flex-end", paddingHorizontal:10 }} >
-					<TouchableOpacity onPress={ ()=>navigation.navigate("ChatList") } >
-						<Ionicons name="ios-chatboxes" size={ 25 } color="white" />
+					<TouchableOpacity onPress={ ()=>navigation.navigate("FriendList", { user_id:user_id }) } >
+						<MaterialCommunityIcons name="account-group" size={ 25 } color="white" />
 					</TouchableOpacity>
 				</View>
 			</View>
