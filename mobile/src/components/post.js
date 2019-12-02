@@ -23,13 +23,13 @@ export default function Post({ item, user_id, postComment, deletePost, navigatio
 	};
 	
 	async function addFriend(){
-		await api.post(`/users/${ item.author._id }/friendRequests`, {}, { headers:{ user_id } });
-		
+		const response = await api.post(`/users/${ item.author._id }/friends`, {}, { headers:{ user_id } });
+		alert(JSON.stringify(response.data)); 
 	};
 	
 	function handleLongPress(){
 		if(user_id !==item.author._id)
-			return options;
+			return options();
 		navigation.navigate("Profile")
 	};
 	
