@@ -7,6 +7,9 @@ const PostController = require("./controllers/PostController");
 const AvatarController = require("./controllers/AvatarController");
 const CommentController = require("./controllers/CommentController");
 const ChatController = require("./controllers/ChatController");
+const FriendController = require("./controllers/FriendController");
+const ApprovalController = require("./controllers/ApprovalController");
+const RejectionController = require("./controllers/RejectionController");
 
 const routes = express.Router();
 const upload =multer(uploadConfig);
@@ -17,11 +20,17 @@ routes.get("/users/:user_id", UserController.show );
 routes.post("/users/:user_id/avatar", upload.single("avatar"), AvatarController.store);
 routes.get("/users/:user_id/posts", PostController.show );
 
+
 routes.get("/posts", PostController.index);
 routes.post("/posts", upload.single("image"), PostController.store);
 routes.delete("/posts/:post_id/delete", PostController.destroy);
 routes.post("/posts/:post_id/new_comment", CommentController.store);
 
 routes.get("/chat", ChatController.index);
+
+routes.post("/users/:target_id/friends", FriendController.store);
+routes.post("/friendRequests/:request_id/approvals", ApprovalController.store);
+routes.post("/friendRequests/:request_id/rejections", RejectionController.store);
+routes.get("/users/:user_id/friends", FriendController.show);
 
 module.exports = routes;

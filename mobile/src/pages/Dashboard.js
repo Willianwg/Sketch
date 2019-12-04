@@ -16,6 +16,7 @@ export default function Dashboard({ navigation }){
 	const [ page, setPage ] = useState(1);
 	const [ user_id, setId ] = useState("");
 	
+	
 	useEffect( () =>{
 		async function getUserId(){
 			const user = await AsyncStorage.getItem("user");
@@ -25,6 +26,7 @@ export default function Dashboard({ navigation }){
 		};
 		getUserId();
 		loadFeed(1);
+		
 	}, [ ] ); 
 	
 	async function loadFeed(pageNumber=page, shouldRefresh=false){
@@ -88,8 +90,8 @@ export default function Dashboard({ navigation }){
 				</TouchableOpacity>
 				<Image source={ logo } style={{ resizeMode:"contain", width:85, height:54, alignSelf:"center" }}/> 
 				<View style={{ width:"20%", alignItems:"flex-end", paddingHorizontal:10 }} >
-					<TouchableOpacity onPress={ ()=>navigation.navigate("ChatList") } >
-						<Ionicons name="ios-chatboxes" size={ 25 } color="white" />
+					<TouchableOpacity onPress={ ()=>navigation.navigate("FriendList", { user_id:user_id }) } >
+						<MaterialCommunityIcons name="account-group" size={ 25 } color="white" />
 					</TouchableOpacity>
 				</View>
 			</View>
@@ -106,8 +108,7 @@ export default function Dashboard({ navigation }){
 				ListFooterComponent={ loading && <ActivityIndicator size="small" color="white"  style={{ marginVertical:30 }}/> }
 				initialNumToRender={ 3 }
 			/>
-			
-			
+
 		</KeyboardAvoidingView> 
 	); 
 };
