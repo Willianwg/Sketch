@@ -14,6 +14,7 @@ export default function Inbox({ navigation }){
 	useEffect( () =>{
 		AsyncStorage.getItem("user").then(user=>setUserId(user));
 		AsyncStorage.getItem("chat").then(chat =>{
+			if(!chat) return;
 			const parsed = JSON.parse(chat);
 			const inbox = parsed.find(item =>item.user._id === talkingTo._id);
 			setMessages(inbox.messages);
@@ -89,6 +90,7 @@ const styles = StyleSheet.create({
 	container:{
 		flex:1,
 		paddingTop:45,
+		paddingBottom:5,
 	},
 	messageContainer:{
 		alignItems:"center",
@@ -108,11 +110,16 @@ const styles = StyleSheet.create({
 	},
 	input:{
 		flex:1,
-		paddingHorizontal:5,
+		backgroundColor:"#E3E3E3",
+		paddingHorizontal:10,
+		borderRadius:17,
+		height:35,
 	},
 	button:{
 		padding:8,
 		backgroundColor:"black",
-		borderRadius:5,
+		borderRadius:17,
+		height:35,
+		marginLeft:2, 
 	},
 }); 
