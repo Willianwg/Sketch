@@ -23,6 +23,7 @@ export default function Inbox({ navigation }){
 	}, [ ] ); 
 	
 	function sendMessage(){
+		if(! newMessage) return;
 		const message ={ to:talkingTo._id, message:newMessage, from:user_id };
 		
 		setMessages([...messages, message]);
