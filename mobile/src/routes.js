@@ -7,6 +7,7 @@ import { Ionicons, Feather, MaterialCommunityIcons } from "@expo/vector-icons";
 import Login from "./pages/login";
 import Dashboard from "./pages/Dashboard";
 import Profile from "./pages/Profile";
+import VisitProfile from "./pages/VisitProfile";
 import NewPost from "./pages/NewPost";
 import ChatList from "./pages/ChatList";
 import Inbox from "./pages/Inbox";
@@ -60,7 +61,8 @@ const SwitchNavigator = createSwitchNavigator({
 const StackNavigator = createStackNavigator({
 	SwitchNavigator,
 	Inbox,
-	FriendList
+	FriendList,
+	VisitProfile,
 },{
 	headerMode:"none"
 })

@@ -37,7 +37,7 @@ export default function Post({ item, user_id, postComment, deletePost, navigatio
 			<View style={styles.container} >
 				<View style={{ flex:1,flexDirection:"row", alignItems:"center", borderBottomWidth:1, borderBottomColor:"#C6C6C6", paddingBottom:8}}>
 					<Image source={{ uri:item.author.avatar_url }} style={ styles.avatar } />
-					<TouchableOpacity onPress={()=>{} } onLongPress={ handleLongPress } style={{flex:1, justifyContent:"center", alignSelf:"center" }} >
+					<TouchableOpacity onPress={()=>item.author._id !== user_id?navigation.navigate("VisitProfile", { user: item.author._id }):navigation.navigate("Profile") } onLongPress={ handleLongPress } style={{flex:1, justifyContent:"center", alignSelf:"center" }} >
 					<Text style={{ marginLeft:8, fontSize:14, lineHeight:30 }}>
 						{ item.author.username }
 					</Text>

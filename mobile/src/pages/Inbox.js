@@ -17,6 +17,7 @@ export default function Inbox({ navigation }){
 			if(!chat) return;
 			const parsed = JSON.parse(chat);
 			const inbox = parsed.find(item =>item.user._id === talkingTo._id);
+			
 			setMessages(inbox.messages);
 		});
 		socket.on("Message", data=>alert(JSON.stringify(data)) );
@@ -24,7 +25,7 @@ export default function Inbox({ navigation }){
 	}, [ ] ); 
 	
 	function sendMessage(){
-		if(! newMessage) return;
+		if(! newMessage.trim() ) return;
 		const message ={ to:talkingTo._id, message:newMessage, from:user_id };
 		
 		setMessages([...messages, message]);

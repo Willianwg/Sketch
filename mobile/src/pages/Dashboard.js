@@ -38,7 +38,8 @@ export default function Dashboard({ navigation }){
 		const { docs } = data;
 		
 		setTotal(data.totalPages);
-		shouldRefresh?setFeed([...feed, ...docs]):setFeed(docs);
+		
+		shouldRefresh?setFeed([ ...feed, ...docs ]):setFeed(docs);
 		
 		setPage(pageNumber+1);
 		setLoading(false);

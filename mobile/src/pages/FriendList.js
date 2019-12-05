@@ -78,7 +78,7 @@ export default function({ navigation }){
 						<View style={{ flex:1 }} >
 							<Text style={[ styles.username, { color:"black" }] } >{ item.username }</Text>
 							<View style={{ flexDirection:"row", flex:1, alignItems:"flex-end", justifyContent:"space-between"}} >
-								<TouchableOpacity style={[ styles.button, { backgroundColor:"blue" }] } onPress={ ()=>{} } ><Text style={ styles.buttonText } >Profile</Text></TouchableOpacity> 
+								<TouchableOpacity style={[ styles.button, { backgroundColor:"blue" }] } onPress={ ()=>navigation.navigate("VisitProfile", { user: item._id }) } ><Text style={ styles.buttonText } >Profile</Text></TouchableOpacity> 
 								<TouchableOpacity style={[ styles.button, { backgroundColor:"white", borderWidth:1, borderColor:"black"  }]  } onPress={ ()=>navigation.navigate("Inbox", { talkingTo:item }) }><Text style={[ styles.buttonText, { color:"black" }] } >Message</Text></TouchableOpacity> 
 							</View>
 						</View>

@@ -16,7 +16,7 @@ const app = express();
 const server = http.Server(app);
 const io = socketio(server);
 
-mongoose.connect("mongodb+srv://user:qwer1245@cluster0-x73mg.mongodb.net/sketch?retryWrites=true&w=majority",{ useNewUrlParser:true, useUnifiedTopology:true });
+mongoose.connect(process.env.MONGO_DATABASE, { useNewUrlParser:true, useUnifiedTopology:true });
 
 let users= { };
 const messages = [ ];

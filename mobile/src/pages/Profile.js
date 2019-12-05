@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react"; 
-import { View, AsyncStorage, ScrollView, Text, Image, StyleSheet, Button, TouchableOpacity, FlatList } from "react-native"; 
+import { View, AsyncStorage, ScrollView, Text, Image, StyleSheet, TouchableOpacity } from "react-native"; 
+import UserPosts from "../components/userposts";
 import api from "../services/api";
 import { AntDesign } from "@expo/vector-icons";
 
@@ -10,7 +11,7 @@ export default function Profile({ navigation }){
 	const [ image, setDraw ] = useState({});
 	const [ user, setUser] = useState({});
 	const [ user_id, setUserId ] = useState("");
-	const [ posts, setPosts ] = useState([]);
+	
 	
 	useEffect( () =>{
 		async function loadUser(){
@@ -21,12 +22,7 @@ export default function Profile({ navigation }){
 			const { data } = response;
 			
 			setUser(data);
-			loadUserPosts(user);
-		};
-		async function loadUserPosts(id){
-			const response = await api.get(`/users/${ id }/posts`);
 			
-			setPosts(response.data);
 		};
 		loadUser();
 	}, [ ] ); 
@@ -69,42 +65,22 @@ export default function Profile({ navigation }){
 		};
 	};
 	
-	function UserPosts({ post }){
-		return(
-			<View style={{flex:1}} >
-				<Image source={{ uri:post.image_url }} style={ styles.post } /> 
-			</View>
-		);
-	};
-	
 	return(
 		<ScrollView style={ styles.container }>
-		<View>
-			<Image source={{ uri:user.avatar_url }} style={styles.avatar} />
-			<View style={{ flexDirection:"row", justifyContent:"space-between", alignItems:"center"}} >
-				<View style={{ flex:1, width:"20%" }} />
-				<Text style={ styles.name } >{ user.username }</Text>
-				<TouchableOpacity style={{ width:"20%"}} onPress={ ()=>getImage(true) }>
-					 <Text style={ styles.editLabel } ><AntDesign name="edit" size={ 16 } color="black" /> Edit</Text>
-				</TouchableOpacity>
+			<View>
+				<Image source={{ uri:user.avatar_url }} style={styles.avatar} />
+				<View style={{ flexDirection:"row", justifyContent:"space-between", alignItems:"center"}} >
+					<View style={{ flex:1, width:"20%" }} />
+					<Text style={ styles.name } >{ user.username }</Text>
+					<TouchableOpacity style={{ width:"20%"}} onPress={ ()=>getImage(true) }>
+						<Text style={ styles.editLabel } ><AntDesign name="edit" size={ 16 } color="black" /> Edit</Text>
+					</TouchableOpacity>
+				</View>
+				<Text style={ styles.bio } >Aqui iria alguma descrição/Bio do perfil, para que possam dar boas vindas, contato ou apenas se apresentar</Text> 
+			
+				<UserPosts id={ user_id } />
+			
 			</View>
-			<Text style={ styles.bio } >Aqui iria alguma descrição/Bio do perfil, para que possam dar boas vindas, contato ou apenas se apresentar</Text> 
-			
-			
-			
-			
-			<FlatList
-				style={ styles.list } 
-				contentContainerStyle={{ alignItems:"stretch" }}
-				data={ posts }
-				keyExtractor={ post => post.description }
-				renderItem={({ item })=><UserPosts post={ item } />} 
-				numColumns={ 3 }
-				initialNumToRender={ 2 }
-			/>
-			
-			
-		</View>
 		</ScrollView>
 	); 
 };
@@ -135,15 +111,5 @@ const styles = StyleSheet.create({
 	},
 	bio:{
 		paddingHorizontal:15
-	},
-	list:{ 
-		marginTop:50, 
-		flex:1,
-	},
-	post:{
-		height:110,
-		resizeMode:"cover",
-		borderWidth:1,
-		borderColor:"gray",
 	},
 }); 
