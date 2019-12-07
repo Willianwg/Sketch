@@ -20,7 +20,7 @@ export default function Login({ navigation }){
 	}, [ ] ); 
 	
 	async function enterUser(){
-		if(!username || !password ) return;
+		if(!username.trim() || !password ) return;
 		
 		const response = await api.post("/users",{ 
 			email,

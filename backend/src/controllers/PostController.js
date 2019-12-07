@@ -24,7 +24,7 @@ module.exports={
 	
 	async index(req, res){
 		const { page = 1 } = req.query;
-		const post = await Post.paginate({},{ page, limit:6, populate:["author", "comments.author"] });
+		const post = await Post.paginate({},{ page, limit:6, populate:["author", "comments.author"], sort:"-createdAt" });
 
 		return res.json(post);
 	},

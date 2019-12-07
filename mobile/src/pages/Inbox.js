@@ -14,7 +14,7 @@ export default function Inbox({ navigation }){
 	useEffect( () =>{
 		AsyncStorage.getItem("user").then(user=>setUserId(user));
 		AsyncStorage.getItem("chat").then(chat =>{
-			if(!chat) return;
+			if(! chat) return;
 			const parsed = JSON.parse(chat);
 			const inbox = parsed.find(item =>item.user._id === talkingTo._id);
 			
