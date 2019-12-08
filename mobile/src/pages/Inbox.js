@@ -3,7 +3,7 @@ import { AsyncStorage, KeyboardAvoidingView, View, StyleSheet, Text, FlatList, T
 import socketio from "socket.io-client";
 
 export default function Inbox({ navigation }){
-	const [ messages, setMessages ] = useState();
+	const [ messages, setMessages ] = useState([]);
 	const [ newMessage, setNewMessage ] = useState("");
 	const [ user_id, setUserId ] = useState("");
 	const [ list , setList ] = useState("");
@@ -12,14 +12,21 @@ export default function Inbox({ navigation }){
 	const socket = useMemo(()=>socketio("http://localhost:3001", { query:{ user_id } }), [ user_id ]);
 	
 	useEffect( () =>{
-		AsyncStorage.getItem("user").then(user=>setUserId(user));
-		AsyncStorage.getItem("chat").then(chat =>{
+		
+		async function loadChat(){
+			const user = await AsyncStorage.getItem("user");
+			setUserId(user);
+			const chat = await AsyncStorage.getItem("chat");
 			if(! chat) return;
+			
 			const parsed = JSON.parse(chat);
 			const inbox = parsed.find(item =>item.user._id === talkingTo._id);
+			if(inbox)
+				setMessages(inbox.messages);
+				
+			};
 			
-			setMessages(inbox.messages);
-		});
+		loadChat();
 		socket.on("Message", data=>alert(JSON.stringify(data)) );
 		
 	}, [ ] ); 
@@ -37,18 +44,30 @@ export default function Inbox({ navigation }){
 	};
 	
 	async function storeMessage(message){
-		const storage = await AsyncStorage.getItem("chat");
-		const chat = JSON.parse(storage);
-		// console.log(chat);
-		const newChat = chat.map(item=>{
-			if( item.user._id === talkingTo._id ){
+		const chat = await AsyncStorage.getItem("chat");
+		if(! chat){
+			const newChat = [{ user:talkingTo._id, messages:[ message ] }];
+			return AsyncStorage.setItem("chat", JSON.stringify(newChat));
+		};
+		
+		const chatParsed = JSON.parse(chat);
+		const currentInboxSaved = chatParsed.find(item=>item.user === talkingTo._id);
+		
+		if(! currentInboxSaved ){
+			const currentInbox = { user:talkingTo._id, messages:[ message ] };
+			chatParsed.push(currentInbox);
+			return AsyncStorage.setItem("chat", JSON.stringify(chatParsed));
+		}
+		
+		const updatedChat = chatParsed
+		.map( item=>{
+			if( item.user._id === talkingTo._id )
 				item.messages.push(message);
-				return item;
-			};
+					
 			return item;
 		});
 		
-		await AsyncStorage.setItem("chat", JSON.stringify(newChat));
+		await AsyncStorage.setItem("chat", JSON.stringify(updatedChat));
 	};
 	
 	function end(){

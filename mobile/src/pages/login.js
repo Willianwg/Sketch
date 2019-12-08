@@ -5,18 +5,18 @@ import logo from "../sketch2.png";
 
 
 export default function Login({ navigation }){ 
-	const [username, setUser] = useState("");
+	const [username, setUsername ] = useState("");
 	const [password, setPassword] = useState("");
 	const [email, setEmail] = useState("");
 	
 	useEffect(() =>{
 		async function getUserId(){
 			const userId = await AsyncStorage.getItem("user");
-			if(userId){
+			if(userId)
 				navigation.navigate("Dashboard");
-			};
 		};
 		getUserId();
+		
 	}, [ ] ); 
 	
 	async function enterUser(){
@@ -30,10 +30,26 @@ export default function Login({ navigation }){
 		
 		const { data } = response;
 		await AsyncStorage.setItem("user", data._id);
+		
+		await loadChat(data._id);
 		navigation.navigate("Dashboard");
 	};
 	
 	
+	async function loadChat(_id){
+	
+			const response = await api.get("/chat", { headers:{ _id } });
+			const { data } = response;
+			const filtered = data.map(item=>{
+				const { users }= item;
+				const user = users.find( object => object._id !== _id);
+				const { messages } = item;
+				const object = { messages, user };
+				return object
+			});
+			await AsyncStorage.setItem("chat", JSON.stringify(filtered));
+			
+	};
 	
 	return(
 		<KeyboardAvoidingView style={ styles.container} behavior="padding">
@@ -54,7 +70,7 @@ export default function Login({ navigation }){
 					autoCapitalize="none"
 					placeholder="Username" 
 					style={ styles.input } 
-					onChangeText={ setUser }
+					onChangeText={ setUsername }
 				/>
 				<TextInput 
 					value={ password }
