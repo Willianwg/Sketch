@@ -101,7 +101,7 @@ export default function Dashboard({ navigation }){
 				style={{ width:"100%", marginTop:1, backgroundColor:"#1B1B1B", borderRadius:8}}
 				data={ feed }
 				keyExtractor={(item, index)=>index.toString()}
-				renderItem={ ({ item })=><Post item={ item } user_id={ user_id } postComment={ postComment } deletePost={ deletePost } navigation={ navigation }/>}
+				renderItem={ ({ item })=><Post post={ item } user_id={ user_id } postComment={ postComment } deletePost={ deletePost } navigation={ navigation }/>}
 				onRefresh={ refresh }
 				refreshing={ refreshing }
 				onEndReached={ ()=> loadFeed(page,true) }
