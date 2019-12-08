@@ -56,7 +56,10 @@ export default function Post({ item, user_id, postComment, deletePost, navigatio
 					renderItem={({ item })=>(
 					<View style={{ flexDirection:"row", marginBottom:10, alignItems:"center"}} >
 						<Image source={{ uri:item.author.avatar_url }} style={ styles.avatar } />
-						<Text style={{ marginLeft:15, fontSize:14, lineHeight:30, fontWeight:"bold", color:"grey" }}>{ item.comment }</Text>
+						<View>
+						<Text style={{ marginLeft:10, fontSize:12, fontWeight:"bold", marginBottom:2}}> { item.author.username }</Text>
+						<Text style={{ marginLeft:15, fontSize:14, fontWeight:"bold", color:"grey" }}>{ item.comment }</Text>
+						</View>
 					</View>
 					)}
 				/>
