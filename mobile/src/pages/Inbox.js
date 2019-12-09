@@ -46,15 +46,15 @@ export default function Inbox({ navigation }){
 	async function storeMessage(message){
 		const chat = await AsyncStorage.getItem("chat");
 		if(! chat){
-			const newChat = [{ user:talkingTo._id, messages:[ message ] }];
+			const newChat = [{ user:talkingTo, messages:[ message ] }];
 			return AsyncStorage.setItem("chat", JSON.stringify(newChat));
 		};
 		
 		const chatParsed = JSON.parse(chat);
-		const currentInboxSaved = chatParsed.find(item=>item.user === talkingTo._id);
+		const currentInboxSaved = chatParsed.find(item=>item.user._id === talkingTo._id);
 		
 		if(! currentInboxSaved ){
-			const currentInbox = { user:talkingTo._id, messages:[ message ] };
+			const currentInbox = { user:talkingTo, messages:[ message ] };
 			chatParsed.push(currentInbox);
 			return AsyncStorage.setItem("chat", JSON.stringify(chatParsed));
 		}
@@ -66,7 +66,6 @@ export default function Inbox({ navigation }){
 					
 			return item;
 		});
-		
 		await AsyncStorage.setItem("chat", JSON.stringify(updatedChat));
 	};
 	
@@ -81,7 +80,8 @@ export default function Inbox({ navigation }){
 				ref={ setList }
 				data={ messages }
 				onEndReached={ end }
-				onEndReachedThreshold={ 1 }
+				onEndReachedThreshold={ 0.1 }
+				initialScrollIndex={ messages.length - 1 }
 				keyExtractor={ (item, index)=>String(index) }
 				renderItem={({ item, index })=>(
 				<View style={{ flex:1 }} >

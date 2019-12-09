@@ -14,8 +14,6 @@ module.exports ={
 		post.comments.push({ author:user_id, comment });
 		await post.save();
 		
-		console.log(post);
-		
 		return res.json(post);
 		
 	},
