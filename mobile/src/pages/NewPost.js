@@ -38,6 +38,7 @@ function NewPost({ navigation }){
 	
 	async function  getLibrary(afterNumber=lastImage){ 
 			const { status } = await Permissions.askAsync(Permissions.CAMERA);
+			await Permissions.askAsync(Permissions.CAMERA_ROLL);
 			setPermission(status === "granted"); 
 			
 			const { assets } = await MediaLibrary.getAssetsAsync({ first:10 , after:String(afterNumber) });
