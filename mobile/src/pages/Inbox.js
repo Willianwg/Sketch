@@ -81,7 +81,6 @@ export default function Inbox({ navigation }){
 				data={ messages }
 				onEndReached={ end }
 				onEndReachedThreshold={ 0.1 }
-				initialScrollIndex={ messages.length - 1 }
 				keyExtractor={ (item, index)=>String(index) }
 				renderItem={({ item, index })=>(
 				<View style={{ flex:1 }} >
