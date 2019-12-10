@@ -9,7 +9,7 @@ export default function SelectedImageModal({ image, navigation, setVisibility })
 	
 	async function formatImageAndUpload(){
 		let imageProps = image;
-		if( imageProps.height > 400 )
+		if( imageProps.height > 1000 && imageProps.width > 1000)
 			imageProps = await ImageManipulator.manipulateAsync(image.uri, [{ resize:{ height:400 }}] );
 			
 		const selectedImage ={ ...imageProps, type:"image/jpeg" };
