@@ -46,7 +46,7 @@ function NewPost({ navigation }){
 			lastImage?setGallery([...gallery, ...assets]):setGallery(assets);
 			setLastImage(lastImage+10);
 			
-		};
+		}
 		
 	async function getImage(){
 			try {
@@ -62,7 +62,7 @@ function NewPost({ navigation }){
 			}catch(err){
 				alert(err);
 			};
-		};
+		}
 	
 	function changeCamera(){
 		if( type === front ){
@@ -72,7 +72,7 @@ function NewPost({ navigation }){
 			setType(front);
 			setRatio("16:9");
 		};
-	};
+	}
 	
 	async function takePicture(){ 
 		await camera.takePictureAsync({ quality:0.1, skipProcessing:true, onPictureSaved:data=>imageee(data) });
@@ -109,6 +109,7 @@ function NewPost({ navigation }){
 				)}
 				onEndReached={ ()=>getLibrary(lastImage) }
 				onEndReachedThreshold={ 0.2 }
+				initialNumToRender={ 10 }
 			/>
 			<Modal 
 				onRequestClose={ ()=>setVisibility(false) } 

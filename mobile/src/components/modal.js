@@ -1,12 +1,18 @@
 import React, { useState, useEffect } from "react"; 
 import { AsyncStorage, View, Text, StyleSheet, Image, TextInput, TouchableOpacity } from "react-native"; 
 import api from "../services/api";
+import * as ImageManipulator from 'expo-image-manipulator';
 
 export default function SelectedImageModal({ image, navigation, setVisibility }){ 
 	const [ description, setDescription ] = useState("");
 	
-	function formatImageAndUpload(){
-		const selectedImage ={ ...image, type:"image/jpeg" };
+	
+	async function formatImageAndUpload(){
+		let imageProps = image;
+		if( imageProps.height > 400 )
+			imageProps = await ImageManipulator.manipulateAsync(image.uri, [{ resize:{ height:400 }}] );
+			
+		const selectedImage ={ ...imageProps, type:"image/jpeg" };
 		selectedImage.name = selectedImage.uri.substring(selectedImage.uri.length - 15);
 		
 		upload(selectedImage);
