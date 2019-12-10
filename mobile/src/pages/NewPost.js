@@ -41,7 +41,7 @@ function NewPost({ navigation }){
 			await Permissions.askAsync(Permissions.CAMERA_ROLL);
 			setPermission(status === "granted"); 
 			
-			const { assets } = await MediaLibrary.getAssetsAsync({ first:10 , after:String(afterNumber) });
+			const { assets } = await MediaLibrary.getAssetsAsync({ first:10 , after:String(afterNumber), sortBy:[ MediaLibrary.SortBy.creationTime ] });
 			//alert(JSON.stringify(assets));
 			lastImage?setGallery([...gallery, ...assets]):setGallery(assets);
 			setLastImage(lastImage+10);
@@ -104,12 +104,12 @@ function NewPost({ navigation }){
 				horizontal
 				renderItem={({ item })=>(
 					<TouchableOpacity onPress={ ()=>{ setImage(item); setVisibility(true) } }>
-						<Image source={{ uri:item.uri }} style={{ height:60, width:60, margin:3, resizeMode:"cover", borderWidth:1, borderColor:"grey"}} /> 
+						<Image source={{ uri:item.uri }} style={{ height:60, width:60, margin:1, resizeMode:"cover", borderWidth:1, borderColor:"grey"}} /> 
 					</TouchableOpacity>
 				)}
 				onEndReached={ ()=>getLibrary(lastImage) }
 				onEndReachedThreshold={ 0.2 }
-				initialNumToRender={ 10 }
+				initialNumToRender={ 6 }
 			/>
 			<Modal 
 				onRequestClose={ ()=>setVisibility(false) } 
