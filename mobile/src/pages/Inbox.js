@@ -33,7 +33,7 @@ export default function Inbox({ navigation }){
 	
 	function sendMessage(){
 		if(! newMessage.trim() ) return;
-		const message ={ to:talkingTo._id, message:newMessage, from:user_id };
+		const message ={ to:talkingTo._id, message:newMessage.trim(), from:user_id };
 		
 		setMessages([...messages, message]);
 		

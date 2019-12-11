@@ -45,11 +45,12 @@ export default function ChatList({ navigation }){
 		return (
 			<View style={ styles.itemContainer } >
 				<Image source={{ uri:item.user.avatar_url }} style={ styles.avatar }  />
-				<TouchableOpacity onPress={()=>navigate(item)} style={{ flex:1, alignSelf:"center" }} >
-					<Text style={{ marginLeft:8, fontSize:24, lineHeight:30, fontWeight:"bold"}}>
+				<TouchableOpacity  onPress={()=>navigate(item)} style={{ flex:1, alignSelf:"center" }} >
+					<Text style={{ marginLeft:8, fontSize:18, lineHeight:30, fontWeight:"bold"}}>
 						{ item.user.username }
 					</Text>
-				</TouchableOpacity >
+					<Text style={{ marginLeft:8, color:"grey", fontSize:14 }}>{ item.messages[ item.messages.length -1 ].message }</Text>
+				</TouchableOpacity  >
 			</View>
 		);
 	};

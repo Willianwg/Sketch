@@ -10,15 +10,14 @@ module.exports ={
 		const request = await FriendRequest.findById(request_id);
 		const user2 = await User.findById(request.from);
 		
-		
-		await request.remove();
-		
 		user1.friends.push(user2._id);
 		user2.friends.push(user1._id);
 		await user1.save();
 		await user2.save();
 		
-		return res.json(request);
+		await request.remove();
+		
+		return res.send();
 	},
 	
 };

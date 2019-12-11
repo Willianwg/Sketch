@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const bcrypt = require("bcryptjs");
 
 const UserSchema = new mongoose.Schema({
 	email:String,
@@ -19,6 +20,14 @@ const UserSchema = new mongoose.Schema({
 	toJSON:{
 		virtuals:true
 	}
+});
+
+UserSchema.pre("save", async function(next){
+	if(! this.password ) return;
+	const hash = await bcrypt.hash(this.password, 10);
+	this.password = hash;
+
+	next();
 });
 
 UserSchema.virtual("avatar_url").get( function(){
