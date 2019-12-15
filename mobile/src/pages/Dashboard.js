@@ -8,6 +8,9 @@ import api from "../services/api";
 import logo from "../assets/smallSketch.png";
 import { SimpleLineIcons, Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 
+import * as Permissions from "expo-permissions";
+import { Notifications } from "expo";
+
 export default function Dashboard({ navigation }){ 
 	const [feed, setFeed] = useState([]);
 	const [refreshing, setRefreshing] = useState(false);
@@ -23,11 +26,21 @@ export default function Dashboard({ navigation }){
 			setId(user);
 			// const socket = socketio("http://localhost:3001");
 			// socket.emit("myName", "Willian");
+			registerToken(user);
 		};
 		getUserId();
 		loadFeed(1);
 		
 	}, [ ] ); 
+	
+	async function registerToken(id){
+		const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
+		
+		const token = await Notifications.getExpoPushTokenAsync();
+		const response = await api.post("/users/push_token", { token }, { headers:{ user_id: id }});
+		alert(JSON.stringify(response.data)); 
+	};
+	
 	
 	async function loadFeed(pageNumber=page, shouldRefresh=false){
 		if( totalPages && pageNumber > totalPages  ) return;

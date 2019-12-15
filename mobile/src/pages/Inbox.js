@@ -1,9 +1,6 @@
 import React, { useState, useEffect, useMemo } from "react"; 
 import { AsyncStorage, KeyboardAvoidingView, View, StyleSheet, Text, FlatList, TextInput, TouchableOpacity } from "react-native"; 
 import socketio from "socket.io-client";
-import { Notifications } from "expo";
-import * as Permissions from "expo-permissions";
-import api from "../services/api";
 
 export default function Inbox({ navigation }){
 	const [ messages, setMessages ] = useState([]);
@@ -34,11 +31,6 @@ export default function Inbox({ navigation }){
 		
 	}, [ ] ); 
 	
-	async function registerToken(){
-		const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
-		const token = await Notifications.getExpoPushTokenAsync();
-		const response = await api.post("/users/push_token", { token }, { headers:{ user:user_id }});
-	};
 	function sendMessage(){
 		if(! newMessage.trim() ) return;
 		const message ={ to:talkingTo._id, message:newMessage.trim(), from:user_id };
@@ -50,6 +42,7 @@ export default function Inbox({ navigation }){
 		setNewMessage(" ");
 		storeMessage(message);
 	};
+	
 	
 	async function storeMessage(message){
 		const chat = await AsyncStorage.getItem("chat");

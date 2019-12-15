@@ -8,6 +8,7 @@ const path = require("path");
 const http = require("http");
 
 const sendMessage = require("./sendMessage");
+const sendNotification = require("./notifications");
 const Chat = require("./models/Chat");
 
 const routes = require("./routes");
@@ -29,8 +30,14 @@ io.on("connection", socket=>{
 	
 	socket.on("newMessage", data=>{
 		messages.push(data);
+		if(! users[data.to])
+			sendNotification(data.to, data);
+			
 		sendMessage(users[data.to], data, io);
 		
+	});
+	socket.on("disconnect", data=>{
+		delete users[user_id];
 	});
 	
 });
