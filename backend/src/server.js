@@ -10,6 +10,8 @@ const http = require("http");
 const sendMessage = require("./sendMessage");
 const sendNotification = require("./notifications");
 const Chat = require("./models/Chat");
+const Cryptr = require("cryptr");
+const cryptr = new Cryptr(process.env.SECRET);
 
 const routes = require("./routes");
 
@@ -20,22 +22,20 @@ const io = socketio(server);
 mongoose.connect(process.env.MONGO_DATABASE, { useNewUrlParser:true, useUnifiedTopology:true });
 
 let users= { };
-const messages = [ ];
 
 io.on("connection", socket=>{
 	const { user_id } = socket.handshake.query;
 	users[user_id] = socket.id;
 	
-	socket.emit("previousMessages", messages);
-	
 	socket.on("newMessage", data=>{
-		messages.push(data);
-		if(! users[data.to])
-			sendNotification(data.to, data);
-			
+		data.message = cryptr.encrypt(data.message);
+		if(! users[data.to]){
+			console.log("PASSOU: ", users[data.to]);
+			sendNotification(data);
+		}
 		sendMessage(users[data.to], data, io);
-		
 	});
+	
 	socket.on("disconnect", data=>{
 		delete users[user_id];
 	});

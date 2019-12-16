@@ -1,17 +1,22 @@
 const { Expo } = require("expo-server-sdk");
 const User = require("./models/User");
+const Cryptr = require("cryptr");
+const cryptr = new Cryptr(process.env.SECRET);
 
-module.exports = async function(target_id, data){
-	const user = await User.findById(target_id);
-	const { pushToken } = user;
+module.exports = async function(data){
+	const sender = await User.findById(data.from);
+	const { username } = sender;
+	
+	const target = await User.findById(data.to);
+	const { pushToken } = target;
 	
 	const expo = new Expo();
+	const decrypted = cryptr.decrypt(data.message);
 	
 	const message ={
-  	  to: pushToken,
-   	 sound: 'default',
-   	 body: data.message,
-	    data: { withSome: 'data' },
+		to: pushToken,
+		sound: "default",
+		body:`${ username }: ${ decrypted }`,
 	}
 
 	try {

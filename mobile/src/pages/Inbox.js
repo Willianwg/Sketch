@@ -27,7 +27,7 @@ export default function Inbox({ navigation }){
 			};
 			
 		loadChat();
-		socket.on("Message", data=>alert(JSON.stringify(data)) );
+		socket.on("Message", data=>console.log(data) );
 		
 	}, [ ] ); 
 	
