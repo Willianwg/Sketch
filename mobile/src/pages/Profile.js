@@ -3,6 +3,7 @@ import { View, AsyncStorage, ScrollView, Text, Image, StyleSheet, TouchableOpaci
 import UserPosts from "../components/userposts";
 import api from "../services/api";
 import { AntDesign } from "@expo/vector-icons";
+import Header from "../components/profileHeader";
 
 import * as DocumentPicker from 'expo-document-picker';
 import * as ImagePicker from 'expo-image-picker';
@@ -66,28 +67,32 @@ export default function Profile({ navigation }){
 	};
 	
 	return(
-		<ScrollView style={ styles.container }>
-			<View>
-				<Image source={{ uri:user.avatar_url }} style={styles.avatar} />
+		<View style={ styles.container } >
+			<View >
 				<View style={{ flexDirection:"row", justifyContent:"space-between", alignItems:"center"}} >
 					<View style={{ flex:1, width:"20%" }} />
 					<Text style={ styles.name } >{ user.username }</Text>
 					<TouchableOpacity style={{ width:"20%"}} onPress={ ()=>getImage(true) }>
-						<Text style={ styles.editLabel } ><AntDesign name="edit" size={ 16 } color="black" /> Edit</Text>
+						<Text style={ styles.editLabel } ><AntDesign name="edit" size={ 24 } color="white" /> Edit</Text>
 					</TouchableOpacity>
 				</View>
 				<Text style={ styles.bio } >Aqui iria alguma descrição/Bio do perfil, para que possam dar boas vindas, contato ou apenas se apresentar</Text> 
 			
 				<UserPosts id={ user_id } />
-			
+				<Header image={{ uri:user.avatar_url }} style={ styles.avatar } username={ user.username } getImage={ getImage }/>
+				<View style={ styles.teste } >
+				<Text style={ styles.username } >LALALALALALALA</Text>
+				</View>
 			</View>
-		</ScrollView>
+		</View>
 	); 
 };
 
 const styles = StyleSheet.create({
 	container:{
 		flex:1,
+		alignItems:"center",
+		justifyContent:"center",
 	},
 	avatar:{
 		flex:1,
@@ -102,14 +107,33 @@ const styles = StyleSheet.create({
 		fontWeight:"bold",
 		marginRight:15,
 		textAlign:"center",
-		width:"50%"
+		width:"50%",
+		zIndex:-1,
+		marginTop:110,
+		opacity:0,
 		
 	},
 	editLabel:{
 		fontSize:8,
 		fontWeight:"normal",
+		color:"white",
 	},
 	bio:{
 		paddingHorizontal:15
 	},
+	username:{
+		fontSize:24,
+		fontWeight:"bold",
+		color: "red", 
+  },
+  teste:{
+  	flex:1,
+		textShadowColor:"#0005FF",
+		textShadowOffset:{
+			width:15,
+			height:8,
+		},
+		elevation:6,
+		backgroundColor:"white",
+	}
 }); 
