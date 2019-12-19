@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react"; 
-import { View, FlatList, Image, StyleSheet  } from "react-native"; 
+import { View, FlatList, Image, StyleSheet, Dimensions  } from "react-native"; 
 import api from "../services/api";
+
+const { width } = Dimensions.get("window");
 
 export default function UserPosts({ id }){ 
 	const [ posts, setPosts ] = useState([]);
@@ -18,7 +20,6 @@ export default function UserPosts({ id }){
 	return(
 		<FlatList
 			style={ styles.list } 
-			contentContainerStyle={{ alignItems:"stretch" }}
 			data={ posts }
 			keyExtractor={ post => post.description }
 			renderItem={({ item })=>(
@@ -34,11 +35,14 @@ export default function UserPosts({ id }){
  
 const styles = StyleSheet.create({
 	list:{ 
-		marginTop:50, 
 		flex:1,
+		backgroundColor:"#f3f3f3",
+		width,
+		marginTop:20,
 	},
 	post:{
 		height:110,
+		width:width/3,
 		resizeMode:"cover",
 		borderWidth:1,
 		borderColor:"gray",

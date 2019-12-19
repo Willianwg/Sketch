@@ -68,22 +68,9 @@ export default function Profile({ navigation }){
 	
 	return(
 		<View style={ styles.container } >
-			<View >
-				<View style={{ flexDirection:"row", justifyContent:"space-between", alignItems:"center"}} >
-					<View style={{ flex:1, width:"20%" }} />
-					<Text style={ styles.name } >{ user.username }</Text>
-					<TouchableOpacity style={{ width:"20%"}} onPress={ ()=>getImage(true) }>
-						<Text style={ styles.editLabel } ><AntDesign name="edit" size={ 24 } color="white" /> Edit</Text>
-					</TouchableOpacity>
-				</View>
-				<Text style={ styles.bio } >Aqui iria alguma descrição/Bio do perfil, para que possam dar boas vindas, contato ou apenas se apresentar</Text> 
-			
-				<UserPosts id={ user_id } />
-				<Header image={{ uri:user.avatar_url }} style={ styles.avatar } username={ user.username } getImage={ getImage }/>
-				<View style={ styles.teste } >
-				<Text style={ styles.username } >LALALALALALALA</Text>
-				</View>
-			</View>
+			<Text style={ styles.bio } >Aqui iria alguma descrição/Bio do perfil, para que possam dar boas vindas, contato ou apenas se apresentar</Text> 
+			<UserPosts id={ user_id } />
+			<Header image={{ uri:user.avatar_url }} style={ styles.avatar } username={ user.username } getImage={ getImage }/>
 		</View>
 	); 
 };
@@ -92,48 +79,9 @@ const styles = StyleSheet.create({
 	container:{
 		flex:1,
 		alignItems:"center",
-		justifyContent:"center",
-	},
-	avatar:{
-		flex:1,
-		height:500,
-		maxHeight:500,
-		width:"100%",
-		resizeMode:"cover",
-		marginBottom:15,
-	},
-	name:{
-		fontSize:30,
-		fontWeight:"bold",
-		marginRight:15,
-		textAlign:"center",
-		width:"50%",
-		zIndex:-1,
-		marginTop:110,
-		opacity:0,
-		
-	},
-	editLabel:{
-		fontSize:8,
-		fontWeight:"normal",
-		color:"white",
 	},
 	bio:{
-		paddingHorizontal:15
+		paddingHorizontal:15,
+		marginTop:150,
 	},
-	username:{
-		fontSize:24,
-		fontWeight:"bold",
-		color: "red", 
-  },
-  teste:{
-  	flex:1,
-		textShadowColor:"#0005FF",
-		textShadowOffset:{
-			width:15,
-			height:8,
-		},
-		elevation:6,
-		backgroundColor:"white",
-	}
 }); 

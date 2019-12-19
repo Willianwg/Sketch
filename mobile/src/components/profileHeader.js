@@ -47,8 +47,13 @@ export default function Header({ image, username, getImage }){
 		extrapolate:"clamp"
 	};
 	const configOpacity ={
-		inputRange:[-450, 0],
+		inputRange:[-420, 0],
 		outputRange:[1, 0],
+		extrapolate:"clamp"
+	};
+	const configBlur ={
+		inputRange:[-420, 0],
+		outputRange:[0.6, 0],
 		extrapolate:"clamp"
 	};
   return (
@@ -56,6 +61,7 @@ export default function Header({ image, username, getImage }){
     <PanGestureHandler onHandlerStateChange={onHandlerStateChanged} onGestureEvent={ animatedEvent } >
     	<Animated.View style={{ flex:1,width, height:480, alignItems:"center", justifyContent:"center", transform:[{ translateY:translateY.interpolate(config) }], overflow:"visible" }} >
     	<ImageBackground source={ image } style={{ height:480, width, zIndex:2, justifyContent:"flex-end" }} >
+    		<Animated.View style={{ width, height:480, position:"absolute", backgroundColor:"black", opacity:translateY.interpolate(configBlur) }} />
     		<Animated.Text style={{ ...styles.username, opacity:translateY.interpolate(configOpacity), left:10 }}>{ username }</Animated.Text>
     		<TouchableOpacity style={{ alignSelf:"flex-end", marginRight:5}} onPress={ ()=>getImage(true) }>
 				<Text style={ styles.editLabel } ><AntDesign name="edit" size={ 18 } color="white" /></Text>
@@ -81,11 +87,6 @@ const styles = StyleSheet.create({
 		color: "white", 
 		position:"absolute", 
 		bottom:0,
-		textShadowColor:"blue",
-		textShadowOffset: {
-			width: 2,
-			height: 5,
-		},
   },
 	editLabel:{
 		fontSize:18,
