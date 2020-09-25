@@ -3,6 +3,7 @@ import { Animated, StyleSheet, Text, View, Dimensions, ImageBackground, Touchabl
 import { PanGestureHandler, State } from "react-native-gesture-handler";
 const { width, height } = Dimensions.get("window");
 import { AntDesign } from "@expo/vector-icons";
+import Footer from "./profileFooter";
 
 export default function Header({ image, username, getImage }){
 	let offset =0;
@@ -56,6 +57,11 @@ export default function Header({ image, username, getImage }){
 		outputRange:[0.6, 0],
 		extrapolate:"clamp"
 	};
+	const configFooter ={
+		inputRange:[-420, 0],
+		outputRange:[0, 60],
+		extrapolate:"clamp"
+	};
   return (
 	<View style={{ ...styles.container,  width, height:480 }} >
     <PanGestureHandler onHandlerStateChange={onHandlerStateChanged} onGestureEvent={ animatedEvent } >
@@ -70,6 +76,8 @@ export default function Header({ image, username, getImage }){
     	</Animated.View>
     </PanGestureHandler>
     	<Animated.Image source={ image } style={{ opacity:translateY.interpolate(configOpacity),position:"absolute", borderRadius:45, height:90, width:90, bottom:-45, borderWidth:1, borderColor:"grey", transform:[{ translateY:translateY.interpolate(config) }]}} />
+  	
+    		<Footer translateY={ translateY }/>
     </View>
   );
 }

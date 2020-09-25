@@ -20,18 +20,21 @@ export default function Login({ navigation }){
 	}, [ ] ); 
 	
 	async function enterUser(){
+		
 		if(!username.trim() || !password ) return;
 		
-		const response = await api.post("/users",{ 
+         const response = await api.post("/users",{ 
 			email,
 			username,
 			password,
 		});
 		
 		const { data } = response;
+		
 		await AsyncStorage.setItem("user", data._id);
 		
 		await loadChat(data._id);
+		
 		navigation.navigate("Dashboard");
 	};
 	

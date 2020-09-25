@@ -102,7 +102,7 @@ export default function Dashboard({ navigation }){
 						<SimpleLineIcons name="logout" size={ 12 } color="white" />  Logout
 					</Text> 
 				</TouchableOpacity>
-				<Image source={ logo } style={{ resizeMode:"contain", width:85, height:54, alignSelf:"center" }}/> 
+				<Text style={{ fontWeight:"bold", fontSize:28, color:"white", lineHeight:60 }} >Sketch</Text>
 				<View style={{ width:"20%", alignItems:"flex-end", paddingHorizontal:10 }} >
 					<TouchableOpacity onPress={ ()=>navigation.navigate("FriendList", { user_id:user_id }) } >
 						<MaterialCommunityIcons name="account-group" size={ 25 } color="white" />
@@ -111,7 +111,7 @@ export default function Dashboard({ navigation }){
 			</View>
 			<FlatList
 				showsVerticalScrollIndicator={ false }
-				style={{ width:"100%", marginTop:1, backgroundColor:"#1B1B1B", borderRadius:8}}
+				style={{ width:"100%", marginTop:1, backgroundColor:"#1C1E1E", borderRadius:8}}
 				data={ feed }
 				keyExtractor={(item, index)=>index.toString()}
 				renderItem={ ({ item })=><Post post={ item } user_id={ user_id } postComment={ postComment } deletePost={ deletePost } navigation={ navigation }/>}
@@ -131,7 +131,7 @@ export default function Dashboard({ navigation }){
 const styles = StyleSheet.create({
 	container:{
 		flex:1,
-		backgroundColor:"#000",
+		backgroundColor:"#1C1E1E",
 	},
 	
 }); 

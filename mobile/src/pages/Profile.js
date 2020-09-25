@@ -81,7 +81,10 @@ const styles = StyleSheet.create({
 		alignItems:"center",
 	},
 	bio:{
+		color:"grey",
+		fontWeight:"bold",
 		paddingHorizontal:15,
 		marginTop:150,
+		textAlign:"center",
 	},
 }); 
